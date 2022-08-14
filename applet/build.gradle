@@ -147,10 +147,101 @@ javacard {
             }
 
             //noinspection GroovyAssignabilityCheck
-            // dependencies {
-            //     remote 'com.klinec:globalplatform:2.1.1'
+            // applet {
+            //     className 'applet.HelloWorldApplet'
+            //     aid '01:ff:ff:04:05:06:07:08:09:01:02'
             // }
+
+
+            //noinspection GroovyAssignabilityCheck
+            // applet {
+            //     className 'applet.HelloWorldApplet'
+            //     aid '01:ff:ff:04:05:06:07:08:09:01:03'
+            // }
+
+            //noinspection GroovyAssignabilityCheck
+            dependencies {
+                // local {
+                //     exps libs + '/globalplatform-2_1_1'
+                //     jar libs + '/globalplatform-2_1_1/gp211.jar'
+                // }
+                remote 'com.klinec:jcardsim:3.0.5.11'
+                // remote 'com.klinec:globalplatform:2.1.1'
+            }
         }
+    }
+
+    scripts {
+        script {
+            name 'select'
+            apdu '00:A4:04:00:0B:01:FF:FF:04:05:06:07:08:09:01:02'
+        }
+
+        script {
+            name 'echo'
+            apdu '00:00:00:00:08:11:22:33:44:55:66:77:88'
+        }
+        task {
+            name 'echo'
+            scripts 'select', 'echo'
+        }
+
+        script {
+            name 'random'
+            apdu '00:7E:00:00:00'
+        }
+        task {
+            name 'random'
+            scripts 'select', 'random'
+        }
+
+        script {
+            name 'balance'
+            apdu '00:02:00:00:00'
+        }
+        script {
+            name 'credit+5'
+            apdu '00:04:00:00:02:00:05'
+        }
+        script {
+            name 'debit-5'
+            apdu '00:06:00:00:02:00:05'
+        }
+        task {
+            name 'balance'
+            scripts 'select', 'balance'
+        }
+        task {
+            name 'credit'
+            scripts 'select', 'balance', 'credit+5', 'balance'
+        }
+        task {
+            name 'debit'
+            scripts 'select', 'balance', 'debit-5', 'balance'
+        }
+
+        script {
+            name 'getData'
+            apdu '00:08:00:00:00'
+        }
+        script {
+            name 'putData'
+            apdu '00:0A:00:00:20:11:11:11:11:11:11:11:11:22:22:22:22:22:22:22:22:33:33:33:33:33:33:33:33:44:44:44:44:44:44:44:44'
+        }
+        task {
+            name 'data'
+            scripts 'select', 'getData', 'putData', 'getData'
+        }
+
+        script {
+            name 'memSize'
+            apdu '00:10:00:00:00'
+        }
+        task {
+            name 'memSize'
+            scripts 'select', 'memSize'
+        }
+
     }
 }
 
